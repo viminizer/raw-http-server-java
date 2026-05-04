@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class HttpRequest {
   private String path;
-  private String method;
+  private HttpMethod method;
   private Map<String, String> headers;
   private String body;
 
@@ -28,7 +28,7 @@ public class HttpRequest {
     return path;
   }
 
-  public String method() {
+  public HttpMethod method() {
     return method;
   }
 
@@ -42,13 +42,19 @@ public class HttpRequest {
 
   private void extractMethodAndPath(String httpRequestLine) throws IOException {
     String[] methodPath = httpRequestLine.split(" ");
-    this.method = methodPath[0];
+    this.method = HttpMethod.valueOf(methodPath[0]);
     this.path = methodPath[1];
 
   }
 
   private void extractBody(BufferedReader reader) throws IOException {
-    int contentLength = Integer.parseInt(headers.get("content-length"));
+    String cl = headers.get("content-length");
+    if (cl == null) {
+      body = null;
+      return;
+
+    }
+    int contentLength = Integer.parseInt(cl);
     char[] cbuf = new char[contentLength];
     reader.read(cbuf, 0, contentLength);
     body = String.valueOf(cbuf);

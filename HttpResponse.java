@@ -4,20 +4,39 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
-  private String responseLine;
   private Map<String, String> headers;
   private String body = null;
+  private int status;
+
+  public HttpResponse() {
+    this.headers = new HashMap<>();
+  }
 
   public HttpResponse(int status, String body) {
-    this.responseLine = "HTTP/1.1 " + status + " OK\r\n";
+    this.status = status;
     this.headers = new HashMap<>();
     this.headers.put("Content-Type", "text/plain");
     this.headers.put("Content-Length", String.valueOf(body.getBytes().length));
     this.body = body;
   }
 
+  private String buildResponseLine() {
+    return "HTTP/1.1 " + status + " OK\r\n";
+
+  }
+
+  public void setStatus(int status) {
+    this.status = status;
+  }
+
+  public void setBody(String body) {
+    this.body = body;
+    this.headers.put("Content-Type", "text/plain");
+    this.headers.put("Content-Length", String.valueOf(body.getBytes().length));
+  }
+
   public String toString() {
-    return responseLine + stringifyHeaders() + body;
+    return buildResponseLine() + stringifyHeaders() + body;
   }
 
   private String stringifyHeaders() {

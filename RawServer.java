@@ -10,26 +10,16 @@ import java.net.Socket;
 
 public class RawServer {
 
-  private static String body = "{name:Kevin}\r\n";
-
-  private static void log(String str) {
-    System.out.println(str);
-  }
-
   public static void handleClientSocket(Socket socket) throws IOException {
     try {
       InputStream in = socket.getInputStream();
       OutputStream out = socket.getOutputStream();
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-
       HttpRequest request = new HttpRequest(reader);
-      HttpResponse response = new HttpResponse(200, body);
-      log(response.toString());
-
-      writer.write(response.toString());
+      Handler handler = new Handler(request);
+      writer.write(handler.getResponse());
       writer.flush();
-      System.out.println("flushed");
     } catch (IOException e) {
       e.printStackTrace();
       System.out.println(e.getMessage());
