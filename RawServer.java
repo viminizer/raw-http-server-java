@@ -11,11 +11,6 @@ import java.net.Socket;
 public class RawServer {
 
   private static String body = "{name:Kevin}\r\n";
-  private static String response = "HTTP/1.1 200 OK\r\n"
-      + "Content-Length: " + body.getBytes().length + "\r\n"
-      + "Content-Type: " + "text/plain" + "\r\n"
-      + "\r\n"
-      + body;
 
   private static void log(String str) {
     System.out.println(str);
@@ -29,9 +24,10 @@ public class RawServer {
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
 
       HttpRequest request = new HttpRequest(reader);
-      log(request.toString());
+      HttpResponse response = new HttpResponse(200, body);
+      log(response.toString());
 
-      writer.write(response);
+      writer.write(response.toString());
       writer.flush();
       System.out.println("flushed");
     } catch (IOException e) {
