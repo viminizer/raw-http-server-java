@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class RawProject {
+public class RawServer {
 
   private static String body = "{name:Kevin}\r\n";
   private static String response = "HTTP/1.1 200 OK\r\n"

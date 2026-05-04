@@ -1,4 +1,4 @@
 #! /bin/bash
 
-javac RawProject.java
-java RawProject
+javac RawServer.java
+java RawServer
