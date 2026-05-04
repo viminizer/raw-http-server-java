@@ -17,19 +17,18 @@ public class RawServer {
       + "\r\n"
       + body;
 
-  public static void requestHandler(Socket socket) throws IOException {
+  public static void handleClientSocket(Socket socket) throws IOException {
     try {
       InputStream in = socket.getInputStream();
       OutputStream out = socket.getOutputStream();
 
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+
       System.out.println("printed: " + reader.readLine());
       writer.write(response);
-      System.out.println("writing the response...");
       writer.flush();
       System.out.println("flushed");
-
     } catch (IOException e) {
       e.printStackTrace();
       System.out.println(e.getMessage());
@@ -48,7 +47,7 @@ public class RawServer {
       Socket socket = serverSocket.accept();
       Thread thread = new Thread(() -> {
         try {
-          requestHandler(socket);
+          handleClientSocket(socket);
         } catch (IOException e) {
           e.printStackTrace();
         }
