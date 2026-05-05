@@ -34,16 +34,17 @@ public class RawServer {
     ServerSocket serverSocket = new ServerSocket(4455);
 
     System.out.println("server is listening... on port 4455\n");
+    ThreadPool pool = new ThreadPool();
     while (true) {
       Socket socket = serverSocket.accept();
-      Thread thread = new Thread(() -> {
+      pool.execute(() -> {
         try {
           handleClientSocket(socket);
         } catch (IOException e) {
           e.printStackTrace();
         }
       });
-      thread.start();
+
     }
   }
 }
