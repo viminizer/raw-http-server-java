@@ -30,11 +30,12 @@ public class RawServer {
   }
 
   public static void main(String[] args) throws IOException {
+    final int PORT = 4455;
 
-    ServerSocket serverSocket = new ServerSocket(4455);
+    ServerSocket serverSocket = new ServerSocket(PORT);
 
-    System.out.println("server is listening... on port 4455\n");
-    ThreadPool pool = new ThreadPool();
+    System.out.println("Server is listening on port " + PORT + "\n");
+    ThreadPool pool = new ThreadPool(10);
     while (true) {
       Socket socket = serverSocket.accept();
       pool.execute(() -> {
