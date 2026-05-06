@@ -36,7 +36,16 @@ public class RawServer {
 
     System.out.println("Server is listening on port " + PORT + "\n");
     ThreadPool pool = new ThreadPool(10);
-    while (true) {
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        serverSocket.close();
+      } catch (IOException e) {
+      }
+      pool.shutdown();
+    }));
+
+    while (!serverSocket.isClosed()) {
       Socket socket = serverSocket.accept();
       pool.execute(() -> {
         try {
